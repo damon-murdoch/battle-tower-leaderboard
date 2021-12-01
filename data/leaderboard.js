@@ -79,7 +79,7 @@ const LEADERBOARD = {
         "Singles": [
           
         ], "Doubles": [
-          ["Scrubbs", "https://twitter.com/SirScrubbington", 175, "Ongoing", "https://t.co/Iea8Wr7px4?amp=1", "https://twitter.com/SirScrubbington/status/1425625983449665536?s=20"]
+          
         ]
       }
     }, 
