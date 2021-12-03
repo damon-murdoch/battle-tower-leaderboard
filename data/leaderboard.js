@@ -2,10 +2,10 @@ const LEADERBOARD = {
 
   // Levels:
   // 0: Root [HashTable]
-  // 0: Generation [Array]
-  // 1: Game [Array]
-  // 2: Format [HashTable]
-  // 3: Record [Array]
+  // 1: Generation [Array]
+  // 2: Game [Array]
+  // 3: Format [HashTable]
+  // 4: Record [Array]
 
   // Row Contents: 
   // 0: User Name
