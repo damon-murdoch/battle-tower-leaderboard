@@ -8,6 +8,9 @@ document.title = config.title;
 // Get the page's query string
 const query = window.location.search;
 
+// Get the query string minus the arguments
+const host = window.location.href.split('?')[0];
+
 // Retrieve the params from the string
 const params = new URLSearchParams(query);
 
@@ -20,8 +23,17 @@ function getOptionSelected(elem_id)
   return element[element.selectedIndex].id;
 }
 
+// Different generation is selected
+function setGenerationDropdown(selected)
+{
+  // Set the generation in the search params
+  params.set('gen', selected);
+
+  window.location.href = window.location.
+}
+
 // Generation drop down updater
-function getGenerationDropdown()
+function getGenerationDropdown(selected = null)
 {
   // Get the generation drop-down document element
   let gen_dd = document.getElementById('gen_dd');
@@ -49,6 +61,13 @@ function getGenerationDropdown()
     gen_dd.appendChild(option);
   }
 
+  // Check to see if an environment variable is set
+  if (selected)
+  {
+    // Set this element to the selected element
+    document.getElementById(selected).selected = true;
+  }
+
   // Set the on-change attribute for the option
   gen_dd.addEventListener('change', function(){
     // Run the game drop down updater for the new generation
@@ -59,8 +78,10 @@ function getGenerationDropdown()
   getGameDropdown();
 }
 
+function setGameDropdown(selected){}
+
 // Game drop down updater
-function getGameDropdown()
+function getGameDropdown(selected = null)
 {
   // Get the selected generation
   let gen = getOptionSelected('gen_dd')
@@ -92,6 +113,13 @@ function getGameDropdown()
     gme_dd.appendChild(option);
   }
 
+  // Check to see if an environment variable is set
+  if (selected)
+  {
+    // Set this element to the selected element
+    document.getElementById(selected).selected = true;
+  }
+
   // Set the on-change attribute for the option
   gme_dd.addEventListener('change', function(){
     // Run the format drop-down updater for the new game
@@ -102,8 +130,13 @@ function getGameDropdown()
   getFormatDropdown();
 }
 
+function setFormatDropdown(selected)
+{
+  // Update the element in the URL
+}
+
 // Format drop down updater
-function getFormatDropdown()
+function getFormatDropdown(selected = null)
 {
   // Get the selected generation
   let gen = getOptionSelected('gen_dd')
@@ -138,6 +171,13 @@ function getFormatDropdown()
     fmt_dd.appendChild(option);
   }
 
+  // Check to see if an environment variable is set
+  if (selected)
+  {
+    // Set this element to the selected element
+    document.getElementById(selected).selected = true;
+  }
+
   // Set the on-change attribute for the option
   fmt_dd.addEventListener('change', function(){
     // Run the format table updater
@@ -159,6 +199,8 @@ function drawTable()
 
   // Get the selected format
   let fmt = getOptionSelected('fmt_dd');
+
+  console.log(gen, ",", gme, ",", fmt)
 
   // Get the table
   let tbody = document.getElementById('tbody');
@@ -200,5 +242,47 @@ function drawTable()
 
 // Code after this point runs when the page loads
 
-// Initialise the drop-downs
+// Generation specified in window.url
+if (window.url.searchParams.get('gen'))
+{
+  // Dereference the specified format
+  let gen = window.url.searchParams.get('gen');
+
+  // If this format exists within the game in the generation
+  if (Object.keys(LEADERBOARD).includes(gen))
+  {
+    // Set drop-down value
+    getGenerationDropdown(window.url.searchParams.get('gen'));
+  }
+}
+
+// Game specified in window.url
+if (window.url.searchParams.get('gme'))
+{
+  // Dereference the specified format
+  let gme = window.url.searchParams.get('gme');
+
+  // If this format exists within the game in the generation
+  if (Object.keys(LEADERBOARD[gen].games).includes(gme))
+  {
+    // Set drop-down value
+    getGameDropdown(window.url.searchParams.get('gme'));
+  }
+}
+
+// Format specified in window.url
+if (window.url.searchParams.get('fmt'))
+{
+  // Dereference the specified format
+  let fmt = window.url.searchParams.get('fmt');
+
+  // If this format exists within the game in the generation
+  if (Object.keys(LEADERBOARD[gen].games[gme].formats).includes(fmt))
+  {
+    // Set drop-down value
+    getFormatDropdown(window.url.searchParams.get('fmt'));
+  }
+}
+
+// Populate the default table
 getGenerationDropdown();
