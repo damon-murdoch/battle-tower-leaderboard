@@ -24,12 +24,16 @@ function getOptionSelected(elem_id)
 }
 
 // Different generation is selected
-function setGenerationDropdown(selected)
+function setGenerationDropdown()
 {
+  // Get the currently selected generation
+  selected = getOptionSelected('gen_dd')
+  
   // Set the generation in the search params
   params.set('gen', selected);
 
-  window.location.href = window.location.
+  // Update the selected generation in the page arguments
+  window.location.href = host + "?" + params.toString();
 }
 
 // Generation drop down updater
@@ -71,14 +75,24 @@ function getGenerationDropdown(selected = null)
   // Set the on-change attribute for the option
   gen_dd.addEventListener('change', function(){
     // Run the game drop down updater for the new generation
-    getGameDropdown();
+    setGenerationDropdown();
   });
 
   // Run the game drop down updater for the new generation
   getGameDropdown();
 }
 
-function setGameDropdown(selected){}
+function setGameDropdown()
+{
+  // Get the currently selected generation
+  selected = getOptionSelected('gme_dd')
+  
+  // Set the generation in the search params
+  params.set('gme', selected);
+  
+  // Update the selected generation in the page arguments
+  window.location.href = host + "?" + params.toString();
+}
 
 // Game drop down updater
 function getGameDropdown(selected = null)
@@ -123,16 +137,24 @@ function getGameDropdown(selected = null)
   // Set the on-change attribute for the option
   gme_dd.addEventListener('change', function(){
     // Run the format drop-down updater for the new game
-    getFormatDropdown();
+    setGameDropdown();
   });
 
   // Run the format drop down updater for the new game
   getFormatDropdown();
 }
 
+// Set the current format and refresh the page
 function setFormatDropdown(selected)
 {
-  // Update the element in the URL
+  // Get the currently selected generation
+  selected = getOptionSelected('fmt_dd')
+  
+  // Set the generation in the search params
+  params.set('fmt', selected);
+    
+  // Update the selected generation in the page arguments
+  window.location.href = host + "?" + params.toString();
 }
 
 // Format drop down updater
@@ -181,7 +203,7 @@ function getFormatDropdown(selected = null)
   // Set the on-change attribute for the option
   fmt_dd.addEventListener('change', function(){
     // Run the format table updater
-    drawTable();
+    setFormatDropdown();
   });
 
   // Draw the table
@@ -243,46 +265,48 @@ function drawTable()
 // Code after this point runs when the page loads
 
 // Generation specified in window.url
-if (window.url.searchParams.get('gen'))
+if (params.get('gen'))
 {
   // Dereference the specified format
-  let gen = window.url.searchParams.get('gen');
+  let gen = params.get('gen');
 
   // If this format exists within the game in the generation
   if (Object.keys(LEADERBOARD).includes(gen))
   {
     // Set drop-down value
-    getGenerationDropdown(window.url.searchParams.get('gen'));
+    getGenerationDropdown(params.get('gen'));
+
+    // Game specified in window.url
+    if (params.get('gme'))
+    {
+      // Dereference the specified format
+      let gme = params.get('gme');
+
+      // If this format exists within the game in the generation
+      if (Object.keys(LEADERBOARD[gen].games).includes(gme))
+      {
+        // Set drop-down value
+        getGameDropdown(params.get('gme'));
+        
+        // Format specified in window.url
+        if (params.get('fmt'))
+        {
+          // Dereference the specified format
+          let fmt = params.get('fmt');
+
+          // If this format exists within the game in the generation
+          if (Object.keys(LEADERBOARD[gen].games[gme].formats).includes(fmt))
+          {
+            // Set drop-down value
+            getFormatDropdown(params.get('fmt'));
+          }
+        }
+      }
+    }
   }
 }
-
-// Game specified in window.url
-if (window.url.searchParams.get('gme'))
+else // No generation selected
 {
-  // Dereference the specified format
-  let gme = window.url.searchParams.get('gme');
-
-  // If this format exists within the game in the generation
-  if (Object.keys(LEADERBOARD[gen].games).includes(gme))
-  {
-    // Set drop-down value
-    getGameDropdown(window.url.searchParams.get('gme'));
-  }
+  // Populate the default table
+  getGenerationDropdown();
 }
-
-// Format specified in window.url
-if (window.url.searchParams.get('fmt'))
-{
-  // Dereference the specified format
-  let fmt = window.url.searchParams.get('fmt');
-
-  // If this format exists within the game in the generation
-  if (Object.keys(LEADERBOARD[gen].games[gme].formats).includes(fmt))
-  {
-    // Set drop-down value
-    getFormatDropdown(window.url.searchParams.get('fmt'));
-  }
-}
-
-// Populate the default table
-getGenerationDropdown();

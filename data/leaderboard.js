@@ -94,7 +94,8 @@ const LEADERBOARD = {
           "Singles": [
             
           ], "Doubles": [
-            
+            ["Scrubbs", "https://twitter.com/SirScrubbington", 107, "Ended", "", ""],
+            ["Scrubbs", "https://twitter.com/SirScrubbington", 101, "Ended", "", ""]
           ]
         }
       }, 
@@ -102,7 +103,6 @@ const LEADERBOARD = {
         name: "[Gen 5] [Black 2 & White 2] Battle Subway", 
         formats: {
           "Singles": [
-            
           ], "Doubles": [
             ["Scrubbs", "https://twitter.com/SirScrubbington", 175, "Ongoing", "https://t.co/Iea8Wr7px4?amp=1", "https://twitter.com/SirScrubbington/status/1425625983449665536?s=20"]
           ]
